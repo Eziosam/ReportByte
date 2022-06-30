@@ -5,24 +5,22 @@ import {
   Input,
 } from "antd";
 import firebase from "../components/connection/firebase";
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
+import HashLoader from "react-spinners/HashLoader";
+import { css } from "@emotion/react";
 
 const { Search } = Input;
-const onSearch = value => console.log(value);
+
+
+const override = css`
+  dislay:flex;
+  justify-content: center;
+  align-items:center;
+`;
 
 function QueryBot() {
 
-
-  const information = [
-    {
-      title: "Oliver Liam",
-      description: "Viking Burrito",
-      address: "oliver@burrito.com",
-      vat: "FRB1235476",
-    },
-
-  ];
-
+  let color = "#40A9FF";
   const [ans, setAns] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -30,16 +28,22 @@ function QueryBot() {
   
   function getans() {
     setLoading(true);
-    ref.get().then((item) => {
-      const items = item.docs.map((doc) => doc.data());
-      setAns(items);
-      setLoading(false);
-    });
+    setAns([]);
+    setTimeout(() => {
+      ref.get().then((item) => {
+        const items = item.docs.map((doc) => doc.data());
+        setAns(items);
+        setLoading(false);
+      });
+    }, 2000);
   }
 
-  useEffect(() => {
-    getans();
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //   getans();
+  //   }, 3000);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   return (
     <>
@@ -72,7 +76,7 @@ function QueryBot() {
                       allowClear
                       enterButton="Ask"
                       size="medium"
-                      onSearch={onSearch}
+                      onSearch={getans}
                     />
                     </Card>
                   </Col>
@@ -91,12 +95,13 @@ function QueryBot() {
           >
             { ans &&
             <Row gutter={[24, 24]}>
-              {information.map((i, index) => (
-                <Col span={24} key={index}>
+          
+                <Col span={24} >
                   <Card className="card-billing-info" bordered="false">
                     <div className="col-info">
                   
-                      {loading ? <h1>Loading...</h1> : null}
+                      { loading ?  <Row className="ant-row-flex ant-row-flex-middle"> <HashLoader color={color} loading={loading} css={override} size={30} /> </Row>: null}
+
                       {ans.map((answer) => (
                               <div className="school" key={answer.id}>
                                 <h2>{answer.ans}</h2>
@@ -106,7 +111,7 @@ function QueryBot() {
                   
                   </Card>
                 </Col>
-              ))}
+            
             </Row>
             }
           </Card>

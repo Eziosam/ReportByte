@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Tables from "./pages/Tables";
 import QueryBot from "./pages/Querybot";
@@ -31,7 +31,7 @@ function App() {
           <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/rtl" component={Rtl} />
           <Route exact path="/profile" component={Profile} />
-          <Redirect from="*" to="/dashboard" />
+         
         </Main>
       </Switch>
     </div>
